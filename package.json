@@ -14,10 +14,16 @@
     "build": "tsc",
     "start": "node dist/api/server.js",
     "start:slack": "node dist/api/slack/index.js",
+    "start:production": "node scripts/production-start.js",
+    "setup:channels": "node scripts/setup-channels.js",
+    "verify:deployment": "node scripts/verify-deployment.js",
+    "deploy:check": "npm run verify:deployment && npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:slack": "jest --testPathPattern=slack"
+    "test:slack": "jest --testPathPattern=slack",
+    "logs:production": "tail -f logs/production.log",
+    "status": "cat status.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
