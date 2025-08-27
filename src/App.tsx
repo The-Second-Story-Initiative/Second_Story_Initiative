@@ -3,18 +3,16 @@ import { useAuthStore } from './stores/authStore';
 import { useEffect } from 'react';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import LearningPage from './pages/learning/LearningPage';
-import TrackDetailPage from './pages/learning/TrackDetailPage';
-import MentorPage from './pages/mentor/MentorPage';
-import ProjectsPage from './pages/projects/ProjectsPage';
-import ProjectDetailPage from './pages/projects/ProjectDetailPage';
-import MentorshipPage from './pages/mentorship/MentorshipPage';
-import AnalyticsPage from './pages/analytics/AnalyticsPage';
+import LoginPage from './pages/auth/Login';
+import RegisterPage from './pages/auth/Register';
+import DashboardPage from './pages/Dashboard';
+import LearningPage from './pages/learning/LearningHub';
+import MentorPage from './pages/mentor/AIMentor';
+import ProjectsPage from './pages/projects/ProjectsShowcase';
+import MentorshipPage from './pages/mentorship/MentorshipHub';
+import AnalyticsPage from './pages/analytics/AnalyticsDashboard';
 import ProfilePage from './pages/profile/ProfilePage';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFound';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
 function App() {
@@ -56,14 +54,12 @@ function App() {
                 
                 {/* Learning routes */}
                 <Route path="/learning" element={<LearningPage />} />
-                <Route path="/learning/tracks/:trackId" element={<TrackDetailPage />} />
                 
                 {/* AI Mentor routes */}
                 <Route path="/mentor" element={<MentorPage />} />
                 
                 {/* Projects routes */}
                 <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
                 
                 {/* Mentorship routes */}
                 <Route path="/mentorship" element={<MentorshipPage />} />

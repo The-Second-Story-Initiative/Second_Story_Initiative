@@ -266,6 +266,120 @@ Format as a structured JSON response.`;
 });
 
 /**
+ * Get Chat History
+ * GET /api/mentor/chat/history
+ */
+router.get('/chat/history', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ success: false, error: 'Authentication required' });
+      return;
+    }
+
+    const { data: chatHistory, error } = await supabase
+      .from('ai_chat_logs')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: true })
+      .limit(50);
+
+    if (error) {
+      res.status(500).json({ success: false, error: 'Failed to fetch chat history' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { messages: chatHistory || [] },
+      message: 'Chat history fetched successfully'
+    });
+  } catch (error) {
+    console.error('Fetch chat history error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch chat history'
+    });
+  }
+});
+
+/**
+ * Rate Chat Message
+ * POST /api/mentor/chat/:messageId/rate
+ */
+router.post('/chat/:messageId/rate', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ success: false, error: 'Authentication required' });
+      return;
+    }
+
+    const { messageId } = req.params;
+    const { rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      res.status(400).json({ success: false, error: 'Rating must be between 1 and 5' });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('ai_chat_logs')
+      .update({ rating, rated_at: new Date().toISOString() })
+      .eq('id', messageId)
+      .eq('user_id', req.user.id);
+
+    if (error) {
+      res.status(500).json({ success: false, error: 'Failed to rate message' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Message rated successfully'
+    });
+  } catch (error) {
+    console.error('Rate message error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to rate message'
+    });
+  }
+});
+
+/**
+ * Clear Chat History
+ * DELETE /api/mentor/chat/clear
+ */
+router.delete('/chat/clear', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ success: false, error: 'Authentication required' });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('ai_chat_logs')
+      .delete()
+      .eq('user_id', req.user.id);
+
+    if (error) {
+      res.status(500).json({ success: false, error: 'Failed to clear chat history' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Chat history cleared successfully'
+    });
+  } catch (error) {
+    console.error('Clear chat history error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to clear chat history'
+    });
+  }
+});
+
+/**
  * Get AI Review History
  * GET /api/mentor/reviews
  */
