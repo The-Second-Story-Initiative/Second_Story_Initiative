@@ -752,31 +752,4 @@ const ProfilePage = () => {
               {profile.recent_activity.map((activity, index) => (
                 <div key={index} className="border-l-2 border-primary-200 pl-4 pb-3">
                   <p className="font-medium text-gray-900 text-sm">{activity.title}</p>
-                  <p className="text-gray-600 text-xs">{activity.description}</p>
-                  <p className="text-gray-500 text-xs mt-1">
-                    {new Date(activity.date).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Member Since */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Member Since</h3>
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Calendar className="h-4 w-4" />
-              <span>{new Date(profile.created_at).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ProfilePage;
+                  <p className="text-gray-600 text-xs">{activity.
