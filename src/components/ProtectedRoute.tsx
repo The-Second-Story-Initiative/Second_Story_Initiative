@@ -9,18 +9,18 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading, checkAuth } = useAuthStore();
+  const { user, loading, checkAuth } = useAuthStore();
   const location = useLocation();
 
   useEffect(() => {
     // Check authentication status when component mounts
-    if (!user && !isLoading) {
+    if (!user && !loading) {
       checkAuth();
     }
-  }, [user, isLoading, checkAuth]);
+  }, [user, loading, checkAuth]);
 
   // Show loading spinner while checking authentication
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-secondary-50 flex items-center justify-center">
         <div className="text-center">

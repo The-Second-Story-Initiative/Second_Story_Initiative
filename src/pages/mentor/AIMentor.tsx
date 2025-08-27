@@ -42,7 +42,7 @@ const AIMentor = () => {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await fetch('/api/ai-mentor/chat/history', {
+      const response = await fetch('/api/mentor/chat/history', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -68,7 +68,7 @@ const AIMentor = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/ai-mentor/chat', {
+      const response = await fetch('/api/mentor/chat', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -106,7 +106,7 @@ const AIMentor = () => {
 
   const rateMessage = async (messageId: string, rating: number) => {
     try {
-      const response = await fetch(`/api/ai-mentor/chat/${messageId}/rate`, {
+      const response = await fetch(`/api/mentor/chat/${messageId}/rate`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -135,7 +135,7 @@ const AIMentor = () => {
   const clearChat = async () => {
     if (window.confirm('Are you sure you want to clear all chat history?')) {
       try {
-        const response = await fetch('/api/ai-mentor/chat/clear', {
+        const response = await fetch('/api/mentor/chat/clear', {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -154,10 +154,10 @@ const AIMentor = () => {
   };
 
   const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-    setCurrentMessage(textarea.value);
+    const target = e.target as HTMLTextAreaElement;
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
+    setCurrentMessage(target.value);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -367,7 +367,7 @@ const AIMentor = () => {
                 <label className="text-sm font-medium text-gray-700">Programming Language:</label>
                 <select
                   value={programmingLanguage}
-                  onChange={(e) => setProgrammingLanguage(e.target.value)}
+                  onChange={(e) => setProgrammingLanguage((e.target as HTMLSelectElement).value)}
                   className="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="javascript">JavaScript</option>
@@ -384,7 +384,7 @@ const AIMentor = () => {
               </div>
               <textarea
                 value={codeSnippet}
-                onChange={(e) => setCodeSnippet(e.target.value)}
+                onChange={(e) => setCodeSnippet((e.target as HTMLTextAreaElement).value)}
                 placeholder="Paste your code here..."
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                 rows={6}

@@ -752,4 +752,16 @@ const ProfilePage = () => {
               {profile.recent_activity.map((activity, index) => (
                 <div key={index} className="border-l-2 border-primary-200 pl-4 pb-3">
                   <p className="font-medium text-gray-900 text-sm">{activity.title}</p>
-                  <p className="text-gray-600 text-xs">{activity.
+                  <p className="text-gray-600 text-xs">{activity.description}</p>
+                  <p className="text-gray-500 text-xs">{new Date(activity.date).toLocaleDateString()}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;

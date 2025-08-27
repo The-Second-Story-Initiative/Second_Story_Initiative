@@ -2,6 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { toast } from 'sonner';
 
+interface ApiResponse {
+  success: boolean;
+  message?: string;
+  user?: User;
+  token?: string;
+}
+
 interface User {
   id: string;
   email: string;
@@ -45,7 +52,7 @@ export const useAuthStore = create<AuthState>()(
             body: JSON.stringify({ email, password }),
           });
 
-          const data = await response.json();
+          const data = await response.json() as ApiResponse;
 
           if (!response.ok) {
             toast.error(data.message || 'Login failed');
@@ -53,8 +60,8 @@ export const useAuthStore = create<AuthState>()(
           }
 
           set({ 
-            user: data.user, 
-            token: data.token,
+            user: data.user!, 
+            token: data.token!,
             loading: false 
           });
           
@@ -82,7 +89,7 @@ export const useAuthStore = create<AuthState>()(
             }),
           });
 
-          const data = await response.json();
+          const data = await response.json() as ApiResponse;
 
           if (!response.ok) {
             toast.error(data.message || 'Registration failed');
@@ -90,8 +97,8 @@ export const useAuthStore = create<AuthState>()(
           }
 
           set({ 
-            user: data.user, 
-            token: data.token,
+            user: data.user!, 
+            token: data.token!,
             loading: false 
           });
           
@@ -139,8 +146,8 @@ export const useAuthStore = create<AuthState>()(
             throw new Error('Token invalid');
           }
 
-          const data = await response.json();
-          set({ user: data.user, loading: false });
+          const data = await response.json() as ApiResponse;
+          set({ user: data.user!, loading: false });
         } catch (error) {
           console.error('Auth check error:', error);
           set({ user: null, token: null, loading: false });
@@ -165,14 +172,14 @@ export const useAuthStore = create<AuthState>()(
             body: JSON.stringify(updates),
           });
 
-          const data = await response.json();
+          const data = await response.json() as ApiResponse;
 
           if (!response.ok) {
             toast.error(data.message || 'Profile update failed');
             return false;
           }
 
-          set({ user: { ...user, ...data.user } });
+          set({ user: { ...user, ...data.user! } });
           toast.success('Profile updated successfully');
           return true;
         } catch (error) {

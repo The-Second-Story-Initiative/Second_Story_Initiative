@@ -379,14 +379,17 @@ export interface ProfileUpdateForm {
   full_name: string;
   bio?: string;
   location?: string;
+  phone?: string;
   website?: string;
-  twitter_username?: string;
+  github_username?: string;
   linkedin_url?: string;
-  current_role?: string;
-  experience_level: 'beginner' | 'intermediate' | 'advanced';
-  learning_goals?: string[];
-  preferred_languages?: string[];
-  timezone?: string;
+  twitter_username?: string;
+  skills: string[];
+  interests: string[];
+  experience_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  preferred_languages: string[];
+  timezone: string;
+  availability: 'full-time' | 'part-time' | 'weekends' | 'flexible';
 }
 
 // Filter and Search Types

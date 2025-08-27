@@ -10,6 +10,7 @@ import githubRoutes from './routes/github.js';
 import mentorshipRoutes from './routes/mentorship.js';
 import analyticsRoutes from './routes/analytics.js';
 import slackRoutes from './routes/slack.js';
+import projectsRoutes from './routes/projects.js';
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/api/github', githubRoutes);
 app.use('/api/mentorship', mentorshipRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/slack', slackRoutes);
+app.use('/api/projects', projectsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -60,6 +62,7 @@ app.get('/api', (req, res) => {
       mentorship: '/api/mentorship',
       analytics: '/api/analytics',
       slack: '/api/slack',
+      projects: '/api/projects',
       health: '/api/health'
     },
     documentation: 'https://github.com/your-org/second-story-initiative'
