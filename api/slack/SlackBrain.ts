@@ -6,6 +6,7 @@
 
 import pkg from '@slack/bolt';
 const { App, LogLevel } = pkg;
+import type { SlashCommand, SlackCommandMiddlewareArgs, AllMiddlewareArgs } from '@slack/bolt';
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
 import { Octokit } from '@octokit/rest';
@@ -33,7 +34,7 @@ interface SlackChannels {
 }
 
 export class SecondStorySlackBrain {
-  private app: App;
+  private app: InstanceType<typeof App>;
   private claude: Anthropic;
   private github: Octokit;
   private supabase: any;
@@ -96,14 +97,14 @@ export class SecondStorySlackBrain {
 
   private registerCommands(): void {
     // Help command
-    this.app.command('/help', async ({ command, ack, respond }) => {
+    this.app.command('/help', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       const helpText = this.generateComprehensiveHelp();
       await respond({ blocks: helpText });
     });
 
     // Progress tracking command
-    this.app.command('/progress', async ({ command, ack, respond }) => {
+    this.app.command('/progress', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const progress = await this.getDetailedProgress(command.user_id);
@@ -114,7 +115,7 @@ export class SecondStorySlackBrain {
     });
 
     // Personalized challenge command
-    this.app.command('/challenge', async ({ command, ack, respond }) => {
+    this.app.command('/challenge', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const challenge = await this.generatePersonalizedChallenge(command.user_id);
@@ -125,7 +126,7 @@ export class SecondStorySlackBrain {
     });
 
     // Mentor help command
-    this.app.command('/mentor', async ({ command, ack, respond }) => {
+    this.app.command('/mentor', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         let mentorHelp;
@@ -141,7 +142,7 @@ export class SecondStorySlackBrain {
     });
 
     // Pair programming command
-    this.app.command('/pair', async ({ command, ack, respond }) => {
+    this.app.command('/pair', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const pairing = await this.findPairPartner(command.user_id, command.text);
@@ -152,7 +153,7 @@ export class SecondStorySlackBrain {
     });
 
     // Daily standup command
-    this.app.command('/standup', async ({ command, ack, respond }) => {
+    this.app.command('/standup', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const standup = await this.recordStandup(command.user_id, command.text);
@@ -163,7 +164,7 @@ export class SecondStorySlackBrain {
     });
 
     // Job board command
-    this.app.command('/jobs', async ({ command, ack, respond }) => {
+    this.app.command('/jobs', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const jobs = await this.getCuratedJobs(command.text);
@@ -174,7 +175,7 @@ export class SecondStorySlackBrain {
     });
 
     // Learning resources command
-    this.app.command('/resources', async ({ command, ack, respond }) => {
+    this.app.command('/resources', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         const resources = await this.getLearningResources(command.text);
@@ -185,7 +186,7 @@ export class SecondStorySlackBrain {
     });
 
     // Admin command (restricted)
-    this.app.command('/admin', async ({ command, ack, respond }) => {
+    this.app.command('/admin', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
       await ack();
       try {
         if (await this.isAdmin(command.user_id)) {
