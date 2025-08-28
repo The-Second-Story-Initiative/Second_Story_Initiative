@@ -4,8 +4,8 @@
  * Workspace: straydogsyndi-do42630.slack.com
  */
 
-import pkg from '@slack/bolt';
-const { App, LogLevel } = pkg;
+import * as bolt from '@slack/bolt';
+const { App, LogLevel } = bolt;
 import type { SlashCommand, SlackCommandMiddlewareArgs, AllMiddlewareArgs } from '@slack/bolt';
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
@@ -349,7 +349,11 @@ Keep responses concise but helpful.
         messages: [{ role: 'user', content: prompt }],
       });
 
-      return this.formatClaudeResponseAsBlocks(response.content[0].text);
+      const content = response.content[0];
+      if ('text' in content) {
+        return this.formatClaudeResponseAsBlocks(content.text);
+      }
+      return this.formatClaudeResponseAsBlocks('Unable to process response');
     } catch (error) {
       console.error('Error getting Claude response:', error);
       return [
