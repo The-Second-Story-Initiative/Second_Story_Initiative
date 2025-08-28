@@ -203,7 +203,7 @@ export class SecondStorySlackBrain {
 
   private setupEventHandlers(): void {
     // Handle @mentions with AI-powered responses
-    this.app.event('app_mention', async ({ event, client }) => {
+    this.app.event('app_mention', async ({ event, client }: any) => {
       try {
         const response = await this.getContextualClaudeResponse(
           event.text,
@@ -222,7 +222,7 @@ export class SecondStorySlackBrain {
     });
 
     // Welcome new members with automated onboarding
-    this.app.event('team_join', async ({ event, client }) => {
+    this.app.event('team_join', async ({ event, client }: any) => {
       try {
         const profile = await this.createLearnerProfile(event.user.id);
         const welcomeBlocks = await this.generateOnboardingMessage(profile);
@@ -239,7 +239,7 @@ export class SecondStorySlackBrain {
     });
 
     // Track achievements through reactions
-    this.app.event('reaction_added', async ({ event, client }) => {
+    this.app.event('reaction_added', async ({ event, client }: any) => {
       try {
         if (['tada', 'rocket', 'fire', 'star', '100'].includes(event.reaction)) {
           await this.recordAchievement(event, client);
