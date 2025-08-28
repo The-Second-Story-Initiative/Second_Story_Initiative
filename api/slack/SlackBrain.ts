@@ -4,9 +4,10 @@
  * Workspace: straydogsyndi-do42630.slack.com
  */
 
-import * as bolt from '@slack/bolt';
-const { App, LogLevel } = bolt;
+import * as SlackBolt from '@slack/bolt';
 import type { SlashCommand, SlackCommandMiddlewareArgs, AllMiddlewareArgs } from '@slack/bolt';
+
+const { App, LogLevel } = SlackBolt;
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
 import { Octokit } from '@octokit/rest';
