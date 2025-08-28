@@ -4,7 +4,8 @@
  * Workspace: straydogsyndi-do42630.slack.com
  */
 
-import { App, LogLevel } from '@slack/bolt';
+import pkg from '@slack/bolt';
+const { App, LogLevel } = pkg;
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
 import { Octokit } from '@octokit/rest';
@@ -43,10 +44,11 @@ export class SecondStorySlackBrain {
   private cache: Map<string, any>;
 
   constructor() {
-    // Initialize Slack app
+    // Initialize Slack app with signing secret for dispatch_failed fix
     this.app = new App({
       token: process.env.SLACK_BOT_TOKEN,
       appToken: process.env.SLACK_APP_TOKEN,
+      signingSecret: process.env.SLACK_SIGNING_SECRET,
       socketMode: true,
       logLevel: LogLevel.INFO,
     });
