@@ -4,6 +4,8 @@
  * Workspace: straydogsyndi-do42630.slack.com
  */
 
+// cSpell:words straydogsyndi supabase VCMW CODEHELP SUPABASE thumbsup standups
+
 import { App, LogLevel } from '@slack/bolt';
 import { WebClient } from '@slack/web-api';
 import Anthropic from '@anthropic-ai/sdk';
