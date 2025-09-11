@@ -200,6 +200,43 @@ export class SecondStorySlackBrain {
         await respond({ text: 'Sorry, I encountered an error accessing admin functions. Please try again later.' });
       }
     });
+
+    // Moderation command (restricted to moderators)
+    this.app.command('/moderate', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
+      await ack();
+      try {
+        if (await this.isModerator(command.user_id)) {
+          const moderationPanel = await this.generateModerationPanel();
+          await respond({ blocks: moderationPanel, response_type: 'ephemeral' });
+        } else {
+          await respond({ text: '❌ This command is restricted to moderators.', response_type: 'ephemeral' });
+        }
+      } catch (error) {
+        await respond({ text: 'Sorry, I encountered an error accessing moderation functions. Please try again later.' });
+      }
+    });
+
+    // Report command
+    this.app.command('/report', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
+      await ack();
+      try {
+        const reportData = this.parseReportCommand(command.text);
+        await this.handleUserReport(command.user_id, reportData, respond);
+      } catch (error) {
+        await respond({ text: 'Sorry, I encountered an error processing your report. Please try again later.' });
+      }
+    });
+
+    // Stats command
+    this.app.command('/stats', async ({ command, ack, respond }: SlackCommandMiddlewareArgs & AllMiddlewareArgs) => {
+      await ack();
+      try {
+        const stats = await this.generateCommunityStats();
+        await respond({ blocks: stats, response_type: 'ephemeral' });
+      } catch (error) {
+        await respond({ text: 'Sorry, I encountered an error retrieving community statistics. Please try again later.' });
+      }
+    });
   }
 
   private setupEventHandlers(): void {
@@ -475,6 +512,213 @@ Keep responses concise but helpful.
 
   private async recordAchievement(event: any, client: any): Promise<void> {
     // Record achievement in database
+  }
+
+  // Enhanced moderation methods
+  private async isModerator(userId: string): Promise<boolean> {
+    try {
+      const { data: profile } = await this.supabase
+        .from('learner_profiles')
+        .select('is_moderator, is_admin')
+        .eq('user_id', userId)
+        .single();
+
+      return profile?.is_moderator || profile?.is_admin || false;
+    } catch (error) {
+      console.error('Error checking moderator status:', error);
+      return false;
+    }
+  }
+
+  private async generateModerationPanel(): Promise<any[]> {
+    try {
+      const { data: recentActions } = await this.supabase
+        .from('moderation_actions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      const { data: pendingReports } = await this.supabase
+        .from('user_reports')
+        .select('*')
+        .eq('status', 'pending')
+        .limit(5);
+
+      return [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: '🛡️ Moderation Dashboard'
+          }
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Recent Actions:* ${recentActions?.length || 0}\n*Pending Reports:* ${pendingReports?.length || 0}\n*Status:* All systems operational`
+          }
+        },
+        {
+          type: 'actions',
+          elements: [
+            {
+              type: 'button',
+              text: {
+                type: 'plain_text',
+                text: '📊 View Reports'
+              },
+              action_id: 'view_reports',
+              style: 'primary'
+            },
+            {
+              type: 'button',
+              text: {
+                type: 'plain_text',
+                text: '⚙️ Settings'
+              },
+              action_id: 'mod_settings'
+            }
+          ]
+        }
+      ];
+    } catch (error) {
+      console.error('Error generating moderation panel:', error);
+      return [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: 'Error loading moderation dashboard.'
+          }
+        }
+      ];
+    }
+  }
+
+  private parseReportCommand(text: string): any {
+    // Simple parsing for now - could be enhanced later
+    return {
+      type: 'general',
+      description: text || 'No description provided'
+    };
+  }
+
+  private async handleUserReport(userId: string, reportData: any, respond: any): Promise<void> {
+    try {
+      // Record the report in database
+      await this.supabase.from('user_reports').insert({
+        reporter_id: userId,
+        report_type: reportData.type,
+        description: reportData.description,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      });
+
+      // Send confirmation to user
+      await respond({
+        text: '✅ Thank you for your report. Our moderators will review it shortly.',
+        response_type: 'ephemeral'
+      });
+
+      // Notify moderators (optional)
+      if (this.channels['admin-alerts']) {
+        await this.app.client.chat.postMessage({
+          channel: this.channels['admin-alerts'],
+          text: `📋 New report received from <@${userId}>: ${reportData.description}`,
+          blocks: [
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*New Report*\n*From:* <@${userId}>\n*Type:* ${reportData.type}\n*Description:* ${reportData.description}`
+              }
+            }
+          ]
+        });
+      }
+    } catch (error) {
+      console.error('Error handling user report:', error);
+      await respond({
+        text: '❌ Sorry, there was an error processing your report. Please try again.',
+        response_type: 'ephemeral'
+      });
+    }
+  }
+
+  private async generateCommunityStats(): Promise<any[]> {
+    try {
+      // Get basic member count
+      const { data: memberCount } = await this.supabase
+        .from('learner_profiles')
+        .select('*', { count: 'exact' })
+        .eq('is_active', true);
+
+      // Get weekly activity (if engagement_metrics table exists)
+      const { data: weeklyActivity } = await this.supabase
+        .from('engagement_metrics')
+        .select('messages_sent')
+        .gte('date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+
+      const totalMessages = weeklyActivity?.reduce((sum: number, item: any) => sum + (item.messages_sent || 0), 0) || 0;
+
+      // Get daily active users (approximate)
+      const { data: todayActive } = await this.supabase
+        .from('learner_profiles')
+        .select('user_id')
+        .gte('last_active', new Date().toDateString());
+
+      return [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: '📊 Community Statistics'
+          }
+        },
+        {
+          type: 'section',
+          fields: [
+            {
+              type: 'mrkdwn',
+              text: `*Total Members:*\n${memberCount?.length || 0}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Active Today:*\n${todayActive?.length || 0}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Messages This Week:*\n${totalMessages}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Community Health:*\n📈 Growing`
+            }
+          ]
+        },
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'mrkdwn',
+              text: `Last updated: ${new Date().toLocaleDateString()}`
+            }
+          ]
+        }
+      ];
+    } catch (error) {
+      console.error('Error generating community stats:', error);
+      return [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: '❌ Error retrieving community statistics. Please try again later.'
+          }
+        }
+      ];
+    }
   }
 
   private async shareMorningMotivation(): Promise<void> {

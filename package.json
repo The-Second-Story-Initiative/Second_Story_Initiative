@@ -24,7 +24,11 @@
     "test:coverage": "jest --coverage",
     "test:slack": "jest --testPathPattern=slack",
     "logs:production": "tail -f logs/production.log",
-    "status": "cat status.json"
+    "status": "cat status.json",
+    "quick-start": "node scripts/quick-start.js",
+    "deploy:production": "node scripts/production-deploy.js",
+    "db:migrate": "psql $SUPABASE_URL -f supabase/migrations/enhanced_production_schema.sql",
+    "monitor": "./scripts/monitor.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
