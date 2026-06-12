@@ -62,75 +62,67 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      try {
-        // Simulate API call - replace with actual API calls
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock data - replace with actual API responses
-        setStats({
-          learningProgress: {
-            completedModules: 12,
-            totalModules: 24,
-            currentStreak: 7,
-            weeklyGoal: 5,
-            weeklyProgress: 3,
-          },
-          githubActivity: {
-            repositories: 8,
-            commits: 45,
-            stars: 23,
-            contributions: 156,
-          },
-          mentorship: {
-            activeMentorships: 2,
-            upcomingSessions: 1,
-            totalSessions: 8,
-          },
-          aiMentor: {
-            questionsAsked: 34,
-            codeReviews: 12,
-            helpfulResponses: 28,
-          },
-        });
+      const { token } = useAuthStore.getState();
+      const headers: Record<string, string> = token
+        ? { Authorization: `Bearer ${token}` }
+        : {};
 
-        setRecentActivity([
-          {
-            id: '1',
-            type: 'learning',
-            title: 'Completed React Hooks Module',
-            description: 'Finished learning about useState and useEffect',
-            timestamp: '2 hours ago',
-            icon: BookOpen,
-            color: 'text-primary-600',
-          },
-          {
-            id: '2',
-            type: 'github',
-            title: 'Pushed to todo-app repository',
-            description: 'Added authentication and user management',
-            timestamp: '4 hours ago',
-            icon: Github,
-            color: 'text-secondary-600',
-          },
-          {
-            id: '3',
-            type: 'ai_mentor',
-            title: 'AI Code Review Completed',
-            description: 'Received feedback on your React component structure',
-            timestamp: '6 hours ago',
-            icon: Bot,
-            color: 'text-accent-600',
-          },
-          {
-            id: '4',
-            type: 'mentorship',
-            title: 'Mentorship Session Scheduled',
-            description: 'Career guidance session with Sarah Chen',
-            timestamp: '1 day ago',
-            icon: Users,
-            color: 'text-success-600',
-          },
-        ]);
+      try {
+        const res = await fetch('/api/analytics/dashboard', { headers });
+        if (res.ok) {
+          const json = await res.json();
+          const d = json.data ?? json;
+          setStats({
+            learningProgress: {
+              completedModules: d.learning_progress?.completed_modules ?? 0,
+              totalModules: d.learning_progress?.total_modules ?? 1,
+              currentStreak: d.learning_progress?.current_streak ?? 0,
+              weeklyGoal: d.learning_progress?.weekly_goal ?? 5,
+              weeklyProgress: d.learning_progress?.weekly_progress ?? 0,
+            },
+            githubActivity: {
+              repositories: d.github_activity?.repositories ?? 0,
+              commits: d.github_activity?.commits_this_week ?? 0,
+              stars: d.github_activity?.stars_received ?? 0,
+              contributions: d.github_activity?.contributions_this_year ?? 0,
+            },
+            mentorship: {
+              activeMentorships: d.mentorship?.active_mentorships ?? 0,
+              upcomingSessions: d.mentorship?.upcoming_sessions ?? 0,
+              totalSessions: d.mentorship?.total_sessions_completed ?? 0,
+            },
+            aiMentor: {
+              questionsAsked: d.ai_mentor?.questions_asked ?? 0,
+              codeReviews: d.ai_mentor?.code_reviews_completed ?? 0,
+              helpfulResponses: d.ai_mentor?.helpful_responses ?? 0,
+            },
+          });
+
+          const activities = d.learning_progress?.recent_activity ?? [];
+          const iconMap: Record<string, any> = {
+            module_completed: BookOpen,
+            track_started: BookOpen,
+            quiz_passed: Award,
+            project_submitted: Github,
+          };
+          const colorMap: Record<string, string> = {
+            module_completed: 'text-primary-600',
+            track_started: 'text-accent-600',
+            quiz_passed: 'text-success-600',
+            project_submitted: 'text-secondary-600',
+          };
+          setRecentActivity(
+            activities.slice(0, 5).map((a: any) => ({
+              id: a.id,
+              type: 'learning' as const,
+              title: a.title,
+              description: a.description,
+              timestamp: new Date(a.timestamp).toLocaleDateString(),
+              icon: iconMap[a.type] ?? BookOpen,
+              color: colorMap[a.type] ?? 'text-primary-600',
+            }))
+          );
+        }
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       } finally {
@@ -364,70 +356,52 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Upcoming Events */}
+        {/* Getting Started */}
         <div className="card">
           <div className="card-content">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-secondary-900">Upcoming</h3>
+              <h3 className="text-lg font-semibold text-secondary-900">Getting Started</h3>
               <Calendar className="h-5 w-5 text-secondary-500" />
             </div>
             <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="p-2 rounded-lg bg-success-100">
-                  <Users className="h-4 w-4 text-success-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-secondary-900">
-                    Mentorship Session
-                  </p>
-                  <p className="text-sm text-secondary-600">
-                    Career guidance with Sarah Chen
-                  </p>
-                  <p className="text-xs text-secondary-500 mt-1">
-                    Tomorrow at 2:00 PM
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
+              <Link to="/learning" className="flex items-start space-x-3 group no-underline hover:no-underline">
                 <div className="p-2 rounded-lg bg-primary-100">
                   <BookOpen className="h-4 w-4 text-primary-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-secondary-900">
-                    Module Deadline
+                  <p className="text-sm font-medium text-secondary-900 group-hover:text-primary-600">
+                    Enroll in a Learning Path
                   </p>
                   <p className="text-sm text-secondary-600">
-                    Complete Advanced React Patterns
-                  </p>
-                  <p className="text-xs text-secondary-500 mt-1">
-                    Due in 3 days
+                    Browse structured tracks and begin learning
                   </p>
                 </div>
-              </div>
-              <div className="flex items-start space-x-3">
+              </Link>
+              <Link to="/mentor" className="flex items-start space-x-3 group no-underline hover:no-underline">
                 <div className="p-2 rounded-lg bg-accent-100">
-                  <Code className="h-4 w-4 text-accent-600" />
+                  <Bot className="h-4 w-4 text-accent-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-secondary-900">
-                    Project Review
+                  <p className="text-sm font-medium text-secondary-900 group-hover:text-primary-600">
+                    Ask the AI Mentor
                   </p>
                   <p className="text-sm text-secondary-600">
-                    Submit portfolio project for feedback
-                  </p>
-                  <p className="text-xs text-secondary-500 mt-1">
-                    Due in 1 week
+                    Get instant help with code questions
                   </p>
                 </div>
-              </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-secondary-200">
-              <Link
-                to="/mentorship"
-                className="text-sm text-primary-600 hover:text-primary-500 inline-flex items-center"
-              >
-                Manage schedule
-                <ArrowRight className="ml-1 h-3 w-3" />
+              </Link>
+              <Link to="/mentorship" className="flex items-start space-x-3 group no-underline hover:no-underline">
+                <div className="p-2 rounded-lg bg-success-100">
+                  <Users className="h-4 w-4 text-success-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-secondary-900 group-hover:text-primary-600">
+                    Find a Mentor
+                  </p>
+                  <p className="text-sm text-secondary-600">
+                    Connect with an industry professional
+                  </p>
+                </div>
               </Link>
             </div>
           </div>

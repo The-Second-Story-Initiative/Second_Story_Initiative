@@ -25,18 +25,18 @@ import { Mentor, MentorFilters, MentorshipRequest } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
 
 const MentorshipHub = () => {
-  const { user } = useAuthStore();
+  const { user, token } = useAuthStore();
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [filteredMentors, setFilteredMentors] = useState<Mentor[]>([]);
   const [myRequests, setMyRequests] = useState<MentorshipRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'find' | 'requests'>('find');
   const [filters, setFilters] = useState<MentorFilters>({
-    expertise: [],
+    specialties: [],
     availability: undefined,
-    experience_level: undefined,
-    price_range: undefined,
-    rating: undefined,
+    experience_years: undefined,
+    hourly_rate_max: undefined,
+    rating_min: undefined,
     search: ''
   });
   const [showFilters, setShowFilters] = useState(false);
@@ -54,7 +54,7 @@ const MentorshipHub = () => {
     try {
       const response = await fetch('/api/mentorship/mentors', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -76,7 +76,7 @@ const MentorshipHub = () => {
     try {
       const response = await fetch('/api/mentorship/requests/my', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -93,33 +93,30 @@ const MentorshipHub = () => {
     let filtered = [...mentors];
 
     if (filters.search) {
+      const q = filters.search.toLowerCase();
       filtered = filtered.filter(mentor => 
-        mentor.full_name.toLowerCase().includes(filters.search!.toLowerCase()) ||
-        mentor.bio.toLowerCase().includes(filters.search!.toLowerCase()) ||
-        mentor.expertise.some(skill => 
-          skill.toLowerCase().includes(filters.search!.toLowerCase())
-        )
+        (mentor.user?.full_name ?? '').toLowerCase().includes(q) ||
+        mentor.bio.toLowerCase().includes(q) ||
+        mentor.specialties.some((skill: string) => skill.toLowerCase().includes(q))
       );
     }
 
-    if (filters.expertise && filters.expertise.length > 0) {
+    if (filters.specialties && filters.specialties.length > 0) {
       filtered = filtered.filter(mentor => 
-        filters.expertise!.some(skill => 
-          mentor.expertise.includes(skill)
-        )
+        filters.specialties!.some((skill: string) => mentor.specialties.includes(skill))
       );
     }
 
-    if (filters.availability) {
-      filtered = filtered.filter(mentor => mentor.availability === filters.availability);
+    if (filters.availability != null) {
+      filtered = filtered.filter(mentor => mentor.is_available === filters.availability);
     }
 
-    if (filters.experience_level) {
-      filtered = filtered.filter(mentor => mentor.experience_level === filters.experience_level);
+    if (filters.experience_years != null) {
+      filtered = filtered.filter(mentor => mentor.experience_years >= filters.experience_years!);
     }
 
-    if (filters.rating) {
-      filtered = filtered.filter(mentor => mentor.rating >= filters.rating!);
+    if (filters.rating_min != null) {
+      filtered = filtered.filter(mentor => mentor.rating >= filters.rating_min!);
     }
 
     setFilteredMentors(filtered);
@@ -131,7 +128,7 @@ const MentorshipHub = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           mentor_id: mentorId,
@@ -282,17 +279,16 @@ const MentorshipHub = () => {
                         Availability
                       </label>
                       <select
-                        value={filters.availability || ''}
+                        value={filters.availability == null ? '' : String(filters.availability)}
                         onChange={(e) => setFilters({ 
                           ...filters, 
-                          availability: e.target.value as any || undefined 
+                          availability: e.target.value === '' ? undefined : e.target.value === 'true' 
                         })}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
-                        <option value="">All Availability</option>
-                        <option value="available">Available</option>
-                        <option value="busy">Busy</option>
-                        <option value="unavailable">Unavailable</option>
+                        <option value="">All</option>
+                        <option value="true">Available</option>
+                        <option value="false">Unavailable</option>
                       </select>
                     </div>
                     <div>
@@ -300,18 +296,18 @@ const MentorshipHub = () => {
                         Experience Level
                       </label>
                       <select
-                        value={filters.experience_level || ''}
+                        value={filters.experience_years ?? ''}
                         onChange={(e) => setFilters({ 
                           ...filters, 
-                          experience_level: e.target.value as any || undefined 
+                          experience_years: e.target.value ? parseInt(e.target.value) : undefined 
                         })}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
                         <option value="">All Levels</option>
-                        <option value="junior">Junior (1-3 years)</option>
-                        <option value="mid">Mid (3-7 years)</option>
-                        <option value="senior">Senior (7+ years)</option>
-                        <option value="expert">Expert (10+ years)</option>
+                        <option value="1">1+ years</option>
+                        <option value="3">3+ years</option>
+                        <option value="7">7+ years</option>
+                        <option value="10">10+ years</option>
                       </select>
                     </div>
                     <div>
@@ -319,10 +315,10 @@ const MentorshipHub = () => {
                         Minimum Rating
                       </label>
                       <select
-                        value={filters.rating || ''}
+                        value={filters.rating_min ?? ''}
                         onChange={(e) => setFilters({ 
                           ...filters, 
-                          rating: e.target.value ? parseFloat(e.target.value) : undefined 
+                          rating_min: e.target.value ? parseFloat(e.target.value) : undefined 
                         })}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
@@ -337,10 +333,10 @@ const MentorshipHub = () => {
                       <button
                         onClick={() => setFilters({ 
                           search: '', 
-                          expertise: [], 
+                          specialties: [], 
                           availability: undefined, 
-                          experience_level: undefined, 
-                          rating: undefined 
+                          experience_years: undefined, 
+                          rating_min: undefined 
                         })}
                         className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
                       >
@@ -358,15 +354,15 @@ const MentorshipHub = () => {
                     <div className="p-6">
                       <div className="flex items-start space-x-4 mb-4">
                         <img
-                          src={mentor.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(mentor.full_name)}&background=6366f1&color=fff`}
-                          alt={mentor.full_name}
+                          src={mentor.user?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(mentor.user?.full_name ?? 'Mentor')}&background=6366f1&color=fff`}
+                          alt={mentor.user?.full_name ?? 'Mentor'}
                           className="w-16 h-16 rounded-full object-cover"
                         />
                         <div className="flex-1">
                           <h3 className="text-lg font-semibold text-gray-900">
-                            {mentor.full_name}
+                            {mentor.user?.full_name ?? 'Mentor'}
                           </h3>
-                          <p className="text-sm text-gray-600">{mentor.title}</p>
+                          <p className="text-sm text-gray-600">{mentor.experience_years}+ years experience</p>
                           <div className="flex items-center space-x-2 mt-1">
                             <div className="flex items-center space-x-1">
                               <Star className="h-4 w-4 text-yellow-400 fill-current" />
@@ -383,7 +379,7 @@ const MentorshipHub = () => {
 
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-1">
-                          {mentor.expertise.slice(0, 3).map((skill, index) => (
+                          {mentor.specialties.slice(0, 3).map((skill: string, index: number) => (
                             <span
                               key={index}
                               className="bg-primary-100 text-primary-700 text-xs px-2 py-1 rounded"
@@ -391,9 +387,9 @@ const MentorshipHub = () => {
                               {skill}
                             </span>
                           ))}
-                          {mentor.expertise.length > 3 && (
+                          {mentor.specialties.length > 3 && (
                             <span className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
-                              +{mentor.expertise.length - 3} more
+                              +{mentor.specialties.length - 3} more
                             </span>
                           )}
                         </div>
@@ -411,7 +407,9 @@ const MentorshipHub = () => {
 
                       <div className="flex items-center justify-between">
                         <div className="text-sm text-gray-600">
-                          <span className="font-medium">${mentor.hourly_rate}/hour</span>
+                          {mentor.hourly_rate != null && (
+                            <span className="font-medium">${mentor.hourly_rate}/hour</span>
+                          )}
                         </div>
                         <div className="flex space-x-2">
                           <Link
@@ -470,8 +468,8 @@ const MentorshipHub = () => {
                         <p className="text-gray-600 mb-3">{request.message}</p>
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <span>Sent {new Date(request.created_at).toLocaleDateString()}</span>
-                          {request.response_message && (
-                            <span>• Response: {request.response_message}</span>
+                          {(request as any).response_message && (
+                            <span>• Response: {(request as any).response_message}</span>
                           )}
                         </div>
                       </div>

@@ -83,8 +83,8 @@ router.get('/dashboard', authenticateToken, async (req: AuthenticatedRequest, re
       total_reviews: aiReviews?.length || 0,
       total_chat_sessions: aiChats?.length || 0,
       recent_reviews: aiReviews?.slice(-5) || [],
-      avg_review_score: aiReviews?.length > 0 
-        ? Math.round(aiReviews.reduce((sum, r) => sum + (r.score || 0), 0) / aiReviews.length)
+      avg_review_score: (aiReviews?.length ?? 0) > 0 
+        ? Math.round((aiReviews ?? []).reduce((sum: number, r: any) => sum + (r.score || 0), 0) / aiReviews!.length)
         : 0
     };
 
@@ -406,8 +406,8 @@ router.get('/platform', authenticateToken, requireRole('admin'), async (req: Aut
     const aiStats = {
       total_reviews: aiReviews?.length || 0,
       total_chat_sessions: aiChats?.length || 0,
-      avg_review_score: aiReviews?.length > 0 
-        ? Math.round(aiReviews.reduce((sum, r) => sum + (r.score || 0), 0) / aiReviews.length)
+      avg_review_score: (aiReviews?.length ?? 0) > 0 
+        ? Math.round((aiReviews ?? []).reduce((sum: number, r: any) => sum + (r.score || 0), 0) / aiReviews!.length)
         : 0
     };
 
@@ -467,7 +467,7 @@ router.get('/engagement', authenticateToken, async (req: AuthenticatedRequest, r
     }
 
     // Get user activity data
-    const activities = [];
+    const activities: Array<{ type: string; timestamp: string; description: string; metadata?: Record<string, any> }> = [];
 
     // Module progress activities
     const { data: moduleActivities } = await supabase
@@ -486,14 +486,16 @@ router.get('/engagement', authenticateToken, async (req: AuthenticatedRequest, r
       .gte('updated_at', startDate.toISOString())
       .order('updated_at', { ascending: false });
 
-    moduleActivities?.forEach(activity => {
+    moduleActivities?.forEach((activity: any) => {
+      const mod = Array.isArray(activity.module) ? activity.module[0] : activity.module;
+      const track = Array.isArray(mod?.track) ? mod.track[0] : mod?.track;
       activities.push({
         type: 'module_progress',
         timestamp: activity.updated_at,
-        description: `${activity.status === 'completed' ? 'Completed' : 'Started'} module: ${activity.module?.title}`,
+        description: `${activity.status === 'completed' ? 'Completed' : 'Started'} module: ${mod?.title ?? 'Unknown'}`,
         metadata: {
-          module: activity.module?.title,
-          track: activity.module?.track?.title,
+          module: mod?.title,
+          track: track?.title,
           status: activity.status
         }
       });

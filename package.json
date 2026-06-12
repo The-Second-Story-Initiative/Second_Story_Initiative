@@ -1,7 +1,7 @@
 {
-  "name": "trae-project",
+  "name": "second-story-initiative",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "client:dev": "vite",
@@ -11,7 +11,7 @@
     "test:database": "tsx -e \"import { DatabaseService } from './api/slack/DatabaseService.js'; import { createClient } from '@supabase/supabase-js'; const db = new DatabaseService(createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)); console.log('Database connection test passed!');\"",
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
     "dev:full": "concurrently \"npm run client:dev\" \"npm run server:dev\" \"npm run slack:dev\"",
-    "build": "tsc",
+    "build": "tsc && vite build",
     "start": "node dist/api/server.js",
     "start:slack": "node dist/api/slack/index.js",
     "start:production": "node scripts/production-start.js",

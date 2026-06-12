@@ -264,7 +264,8 @@ Return as JSON with this structure:
         messages: [{ role: 'user', content: prompt }],
       });
 
-      const result = JSON.parse(response.content[0].text);
+      const block = response.content[0];
+      const result = JSON.parse('text' in block ? block.text : '');
       return result;
     } catch (error) {
       console.error('Error curating content with Claude:', error);

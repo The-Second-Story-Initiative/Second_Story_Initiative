@@ -492,8 +492,8 @@ router.get('/stats', authenticateToken, async (req: AuthenticatedRequest, res: R
     // Calculate stats
     const totalRepos = repos.length;
     const publicRepos = repos.filter(repo => !repo.private).length;
-    const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-    const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0);
+    const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
+    const totalForks = repos.reduce((sum, repo) => sum + (repo.forks_count ?? 0), 0);
     const languages = repos.reduce((acc: any, repo) => {
       if (repo.language) {
         acc[repo.language] = (acc[repo.language] || 0) + 1;

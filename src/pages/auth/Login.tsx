@@ -162,30 +162,32 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Demo Account */}
-        <div className="card bg-accent-50 border-accent-200">
-          <div className="card-content">
-            <h3 className="text-sm font-medium text-accent-800 mb-2">
-              Demo Account
-            </h3>
-            <p className="text-sm text-accent-700 mb-3">
-              Try the platform with our demo account:
-            </p>
-            <div className="text-sm text-accent-600 space-y-1">
-              <div><strong>Email:</strong> demo@secondstory.dev</div>
-              <div><strong>Password:</strong> demo123</div>
+        {/* Demo Account — only shown in development */}
+        {import.meta.env.DEV && (
+          <div className="card bg-accent-50 border-accent-200">
+            <div className="card-content">
+              <h3 className="text-sm font-medium text-accent-800 mb-2">
+                Demo Account
+              </h3>
+              <p className="text-sm text-accent-700 mb-3">
+                Try the platform with our demo account:
+              </p>
+              <div className="text-sm text-accent-600 space-y-1">
+                <div><strong>Email:</strong> demo@secondstory.dev</div>
+                <div><strong>Password:</strong> demo123</div>
+              </div>
+              <button
+                onClick={() => {
+                  setEmail('demo@secondstory.dev');
+                  setPassword('demo123');
+                }}
+                className="mt-3 text-sm text-accent-700 hover:text-accent-800 font-medium"
+              >
+                Use Demo Credentials
+              </button>
             </div>
-            <button
-              onClick={() => {
-                setEmail('demo@secondstory.dev');
-                setPassword('demo123');
-              }}
-              className="mt-3 text-sm text-accent-700 hover:text-accent-800 font-medium"
-            >
-              Use Demo Credentials
-            </button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

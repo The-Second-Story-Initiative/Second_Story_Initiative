@@ -14,8 +14,10 @@ import {
 import { toast } from 'sonner';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { LearningTrack, LearningTrackFilters } from '../../types';
+import { useAuthStore } from '../../stores/authStore';
 
 const LearningHub = () => {
+  const { token } = useAuthStore();
   const [tracks, setTracks] = useState<LearningTrack[]>([]);
   const [filteredTracks, setFilteredTracks] = useState<LearningTrack[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ const LearningHub = () => {
     try {
       const response = await fetch('/api/learning/tracks', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -95,7 +97,7 @@ const LearningHub = () => {
       const response = await fetch(`/api/learning/tracks/${trackId}/enroll`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });

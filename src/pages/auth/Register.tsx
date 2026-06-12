@@ -63,7 +63,7 @@ const Register = () => {
     setIsLoading(true);
     
     try {
-      await register(formData.email, formData.password, formData.fullName);
+      await register(formData.email, formData.password, formData.fullName, 'learner');
       toast.success('Account created successfully! Welcome to Second Story Initiative!');
       navigate('/dashboard');
     } catch (error) {

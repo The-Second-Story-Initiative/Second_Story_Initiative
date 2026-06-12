@@ -54,9 +54,10 @@ const AnalyticsDashboard = () => {
       setLoading(true);
       
       // Fetch personal analytics
+      const { token } = useAuthStore.getState();
       const personalResponse = await fetch(`/api/analytics/dashboard?timeRange=${timeRange}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -68,7 +69,7 @@ const AnalyticsDashboard = () => {
       // Fetch platform analytics (if user has access)
       const platformResponse = await fetch(`/api/analytics/platform?timeRange=${timeRange}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
         }
       });
       
@@ -80,7 +81,7 @@ const AnalyticsDashboard = () => {
       // Fetch learning activity
       const activityResponse = await fetch(`/api/analytics/learning-activity?timeRange=${timeRange}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
         }
       });
       
@@ -100,7 +101,7 @@ const AnalyticsDashboard = () => {
     try {
       const response = await fetch(`/api/analytics/export?timeRange=${timeRange}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
         }
       });
       
@@ -227,64 +228,72 @@ const AnalyticsDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-blue-100 text-sm">Learning Hours</p>
-                      <p className="text-2xl font-bold">{analytics.total_learning_hours}</p>
+                      <p className="text-2xl font-bold">{(analytics as any).total_learning_hours ?? 0}</p>
                     </div>
                     <Clock className="h-8 w-8 text-blue-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(analytics.learning_hours_change)}`}>
-                    {getChangeIcon(analytics.learning_hours_change)}
+                  {(() => { const c = (analytics as any).learning_hours_change ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {analytics.learning_hours_change > 0 ? '+' : ''}{analytics.learning_hours_change}% from last period
+                      {c > 0 ? '+' : ''}{c}% from last period
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-green-100 text-sm">Completed Modules</p>
-                      <p className="text-2xl font-bold">{analytics.completed_modules}</p>
+                      <p className="text-2xl font-bold">{analytics.learning_progress?.completed_modules ?? 0}</p>
                     </div>
                     <BookOpen className="h-8 w-8 text-green-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(analytics.completed_modules_change)}`}>
-                    {getChangeIcon(analytics.completed_modules_change)}
+                  {(() => { const c = (analytics as any).completed_modules_change ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {analytics.completed_modules_change > 0 ? '+' : ''}{analytics.completed_modules_change}% from last period
+                      {c > 0 ? '+' : ''}{c}% from last period
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-purple-100 text-sm">GitHub Commits</p>
-                      <p className="text-2xl font-bold">{analytics.github_commits}</p>
+                      <p className="text-2xl font-bold">{analytics.github_activity?.commits_this_week ?? 0}</p>
                     </div>
                     <GitBranch className="h-8 w-8 text-purple-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(analytics.github_commits_change)}`}>
-                    {getChangeIcon(analytics.github_commits_change)}
+                  {(() => { const c = (analytics as any).github_commits_change ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {analytics.github_commits_change > 0 ? '+' : ''}{analytics.github_commits_change}% from last period
+                      {c > 0 ? '+' : ''}{c}% from last period
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-orange-100 text-sm">AI Interactions</p>
-                      <p className="text-2xl font-bold">{analytics.ai_interactions}</p>
+                      <p className="text-2xl font-bold">{analytics.ai_mentor?.questions_asked ?? 0}</p>
                     </div>
                     <MessageCircle className="h-8 w-8 text-orange-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(analytics.ai_interactions_change)}`}>
-                    {getChangeIcon(analytics.ai_interactions_change)}
+                  {(() => { const c = (analytics as any).ai_interactions_change ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {analytics.ai_interactions_change > 0 ? '+' : ''}{analytics.ai_interactions_change}% from last period
+                      {c > 0 ? '+' : ''}{c}% from last period
                     </span>
                   </div>
+                  ); })()}
                 </div>
               </div>
 
@@ -307,7 +316,7 @@ const AnalyticsDashboard = () => {
                 <div className="bg-white rounded-lg border border-gray-200 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Learning Progress</h3>
                   <div className="space-y-4">
-                    {analytics.learning_tracks?.map((track, index) => (
+                    {((analytics as any).learning_tracks ?? []).map((track: any, index: number) => (
                       <div key={index} className="flex items-center justify-between">
                         <div className="flex-1">
                           <p className="text-sm font-medium text-gray-900">{track.name}</p>
@@ -329,15 +338,15 @@ const AnalyticsDashboard = () => {
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
                       <Pie
-                        data={analytics.skills_distribution}
+                        data={(analytics as any).skills_distribution ?? []}
                         cx="50%"
                         cy="50%"
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }: { name: string; percent?: number }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                       >
-                        {analytics.skills_distribution?.map((entry, index) => (
+                        {((analytics as any).skills_distribution ?? []).map((entry: any, index: number) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
@@ -351,7 +360,7 @@ const AnalyticsDashboard = () => {
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
                 <div className="space-y-3">
-                  {analytics.recent_achievements?.map((achievement, index) => (
+                  {((analytics as any).recent_achievements ?? []).map((achievement: any, index: number) => (
                     <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                       <Award className="h-6 w-6 text-yellow-500" />
                       <div className="flex-1">
@@ -376,64 +385,72 @@ const AnalyticsDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-indigo-100 text-sm">Total Users</p>
-                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.total_users)}</p>
+                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.users?.total ?? 0)}</p>
                     </div>
                     <Users className="h-8 w-8 text-indigo-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(platformAnalytics.users_growth)}`}>
-                    {getChangeIcon(platformAnalytics.users_growth)}
+                  {(() => { const c = (platformAnalytics as any).users_growth ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {platformAnalytics.users_growth > 0 ? '+' : ''}{platformAnalytics.users_growth}% growth
+                      {c > 0 ? '+' : ''}{c}% growth
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-teal-100 text-sm">Active Sessions</p>
-                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.active_sessions)}</p>
+                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.users?.active_this_month ?? 0)}</p>
                     </div>
                     <Activity className="h-8 w-8 text-teal-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(platformAnalytics.sessions_growth)}`}>
-                    {getChangeIcon(platformAnalytics.sessions_growth)}
+                  {(() => { const c = (platformAnalytics as any).sessions_growth ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {platformAnalytics.sessions_growth > 0 ? '+' : ''}{platformAnalytics.sessions_growth}% growth
+                      {c > 0 ? '+' : ''}{c}% growth
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-pink-100 text-sm">Total Projects</p>
-                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.total_projects)}</p>
+                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.projects?.total_projects ?? 0)}</p>
                     </div>
                     <Code className="h-8 w-8 text-pink-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(platformAnalytics.projects_growth)}`}>
-                    {getChangeIcon(platformAnalytics.projects_growth)}
+                  {(() => { const c = (platformAnalytics as any).projects_growth ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {platformAnalytics.projects_growth > 0 ? '+' : ''}{platformAnalytics.projects_growth}% growth
+                      {c > 0 ? '+' : ''}{c}% growth
                     </span>
                   </div>
+                  ); })()}
                 </div>
 
                 <div className="bg-gradient-to-r from-amber-500 to-amber-600 rounded-lg p-6 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-amber-100 text-sm">Mentorships</p>
-                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.total_mentorships)}</p>
+                      <p className="text-2xl font-bold">{formatNumber(platformAnalytics.mentorship?.total_mentors ?? 0)}</p>
                     </div>
                     <Star className="h-8 w-8 text-amber-200" />
                   </div>
-                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(platformAnalytics.mentorships_growth)}`}>
-                    {getChangeIcon(platformAnalytics.mentorships_growth)}
+                  {(() => { const c = (platformAnalytics as any).mentorships_growth ?? 0; return (
+                  <div className={`flex items-center space-x-1 mt-2 ${getChangeColor(c)}`}>
+                    {getChangeIcon(c)}
                     <span className="text-sm">
-                      {platformAnalytics.mentorships_growth > 0 ? '+' : ''}{platformAnalytics.mentorships_growth}% growth
+                      {c > 0 ? '+' : ''}{c}% growth
                     </span>
                   </div>
+                  ); })()}
                 </div>
               </div>
 
@@ -441,7 +458,7 @@ const AnalyticsDashboard = () => {
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Platform Usage Trends</h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={platformAnalytics.usage_trends}>
+                  <LineChart data={(platformAnalytics as any).usage_trends ?? []}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
                     <YAxis />
@@ -456,7 +473,7 @@ const AnalyticsDashboard = () => {
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Feature Usage</h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={platformAnalytics.feature_usage}>
+                  <BarChart data={(platformAnalytics as any).feature_usage ?? []}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="feature" />
                     <YAxis />
