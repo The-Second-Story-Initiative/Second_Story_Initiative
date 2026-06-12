@@ -66,6 +66,12 @@ const HomePage = () => {
             </div>
             <div className="flex items-center space-x-4">
               <Link
+                to="/about"
+                className="text-secondary-600 hover:text-secondary-900 font-medium"
+              >
+                About
+              </Link>
+              <Link
                 to="/login"
                 className="text-secondary-600 hover:text-secondary-900 font-medium"
               >
@@ -281,7 +287,10 @@ const HomePage = () => {
             </div>
           </div>
           <div className="border-t border-secondary-800 mt-8 pt-8 text-center text-secondary-400">
-            <p>&copy; 2024 Second Story Initiative. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Second Story Initiative. All rights reserved.</p>
+            <p className="mt-2 text-sm text-secondary-500">
+              A registered 501(c)(3) nonprofit organization. EIN available upon request.
+            </p>
           </div>
         </div>
       </footer>

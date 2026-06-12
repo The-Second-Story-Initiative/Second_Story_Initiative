@@ -15,12 +15,64 @@
   }
   
   body {
-    @apply bg-white text-secondary-900;
+    @apply bg-white text-secondary-900 antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  
+
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Improved typography for readability */
+  p {
+    @apply leading-relaxed;
+    max-width: 65ch;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl font-bold leading-tight;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold leading-tight;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold leading-snug;
+  }
+
+  h4 {
+    @apply text-xl font-semibold leading-snug;
+  }
+
+  /* Ensure links are clearly distinguishable */
+  a {
+    @apply text-primary-600 hover:text-primary-700;
+    text-decoration-thickness: 0.1em;
+    text-underline-offset: 0.15em;
+  }
+
+  a:hover {
+    text-decoration-line: underline;
+  }
+
+  /* Improve list readability */
+  ul, ol {
+    @apply leading-relaxed;
+  }
+
+  li {
+    @apply mb-1;
   }
 }
 
@@ -145,15 +197,15 @@
   }
   
   .bg-gradient-primary {
-    background: linear-gradient(135deg, theme('colors.primary.600'), theme('colors.primary.700'));
+    background: linear-gradient(135deg, theme('colors.primary.600'), theme('colors.primary.800'));
   }
-  
+
   .bg-gradient-secondary {
-    background: linear-gradient(135deg, theme('colors.secondary.600'), theme('colors.secondary.700'));
+    background: linear-gradient(135deg, theme('colors.secondary.600'), theme('colors.secondary.800'));
   }
-  
+
   .bg-gradient-accent {
-    background: linear-gradient(135deg, theme('colors.accent.500'), theme('colors.accent.600'));
+    background: linear-gradient(135deg, theme('colors.accent-accessible.500'), theme('colors.accent-accessible.700'));
   }
   
   .glass {

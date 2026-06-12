@@ -3,6 +3,7 @@ import { useAuthStore } from './stores/authStore';
 import { useEffect } from 'react';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/auth/Login';
 import RegisterPage from './pages/auth/Register';
 import DashboardPage from './pages/Dashboard';
@@ -34,9 +35,10 @@ function App() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<HomePage />} />
-      <Route 
-        path="/login" 
-        element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
+      <Route path="/about" element={<AboutPage />} />
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />}
       />
       <Route 
         path="/register" 
