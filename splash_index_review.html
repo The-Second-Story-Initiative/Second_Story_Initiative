@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Second Story unlocks the potential of justice-impacted individuals through quality software engineering apprenticeships and narrative empowerment.">
+    <meta name="keywords" content="justice-impacted, software engineering, apprenticeships, reentry, recidivism, technology training">
+    <meta name="author" content="Second Story">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#355E3B">
+    <meta name="msapplication-TileColor" content="#355E3B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Second Story">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://secondstory.org/">
+    <meta property="og:title" content="Second Story: Code, Narrative, and Opportunity">
+    <meta property="og:description" content="Building pathways to economic mobility for justice-impacted individuals through technology and storytelling.">
+    <meta property="og:image" content="assets/brand/2ndStoryBanner.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Second Story">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://secondstory.org/">
+    <meta property="twitter:title" content="Second Story: Code, Narrative, and Opportunity">
+    <meta property="twitter:description" content="Building pathways to economic mobility for justice-impacted individuals through technology and storytelling.">
+    <meta property="twitter:image" content="assets/brand/2ndStoryBanner.png">
+    <meta property="twitter:creator" content="@SecondStory">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NonProfit",
+        "name": "Second Story",
+        "description": "Building pathways to economic mobility for justice-impacted individuals through technology and storytelling.",
+        "url": "https://secondstory.org",
+        "logo": "https://secondstory.org/assets/brand/2ndStoryCircle.png",
+        "sameAs": [
+            "https://github.com/StrayDogSyn/Second_Story_Splash"
+        ],
+        "foundingDate": "2024",
+        "areaServed": "United States",
+        "serviceType": "Software Engineering Apprenticeships"
+    }
+    </script>
+    
+    <title>Second Story: Code, Narrative, and Opportunity</title>
+    
+    <!-- DNS Prefetch for Performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&family=Orbitron:wght@600;700;900&display=swap" as="style">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="assets/brand/2ndStoryCircle.png" as="image">
+    <link rel="preload" href="js/app.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/program-status.css">
+    
+    <!-- macOS-specific improvements for better readability -->
+    <script>
+        // Detect macOS and load CSS conditionally
+        if (/Mac|iPhone|iPad|iPod/.test(navigator.platform) || 
+            /MacIntel/.test(navigator.platform) ||
+            navigator.userAgentData?.platform === 'macOS') {
+            const macOSCSS = document.createElement('link');
+            macOSCSS.rel = 'stylesheet';
+            macOSCSS.href = 'css/corporate-macos-fix.css';
+            macOSCSS.id = 'macos-fix-css';
+            document.head.appendChild(macOSCSS);
+        }
+    </script>
+    
+    <!-- Modern Scripts with Enhanced Loading -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js" defer></script>
+    <script src="js/app.js" defer></script>
+    
+    <!-- Enhanced Analytics & Performance Monitoring -->
+    <script>
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            if ('performance' in window) {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart);
+            }
+        });
+        
+        // Error tracking
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            // Send to analytics service
+        });
+        
+        // Vercel Analytics
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        window.va('track', 'EventName', { property: 'value' });
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/2ndStoryCircle.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/2ndStoryCircle.png">
+    <link rel="apple-touch-icon" href="assets/brand/2ndStoryCircle.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Program Status Banner -->
+    <div class="status-banner">
+        <div class="container">
+            <p><strong>Program Status:</strong> In Development | Seeking Founding Partners & Initial Funding | Target Launch: Q1-Q2 2027</p>
+        </div>
+    </div>
+
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="#" class="nav__brand" aria-label="Second Story home">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Logo" class="nav__logo">
+                    <span class="nav__brand-text">Second Story</span>
+                </a>
+                
+                <div class="nav__menu">
+                    <a href="#our-story" class="nav__link">Our Story</a>
+                    <a href="#problem" class="nav__link">The Crisis</a>
+                    <a href="#solution" class="nav__link">Our Model</a>
+                    <a href="#journey" class="nav__link">The Journey</a>
+                    <a href="#impact" class="nav__link">Our Impact</a>
+                    <a href="#join-us" class="nav__link nav__link--primary">Join Us</a>
+                </div>
+                
+                <button 
+                    id="menu-btn" 
+                    class="nav__toggle" 
+                    aria-label="Toggle mobile menu" 
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
+                >
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </nav>
+            
+            <div id="mobile-menu" class="nav__mobile" role="menu">
+                <a href="#our-story" class="nav__mobile-link" role="menuitem">Our Story</a>
+                <a href="#problem" class="nav__mobile-link" role="menuitem">The Crisis</a>
+                <a href="#solution" class="nav__mobile-link" role="menuitem">Our Model</a>
+                <a href="#journey" class="nav__mobile-link" role="menuitem">The Journey</a>
+                <a href="#impact" class="nav__mobile-link" role="menuitem">Our Impact</a>
+                <a href="#join-us" class="nav__mobile-link" role="menuitem">Join Us</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- Hero Section -->
+        <section id="hero" class="hero">
+            <div class="container">
+                <div class="hero__content">
+                    <div class="hero__brand">
+                        <img src="assets/brand/2ndStory01.png" alt="Second Story Logo" class="hero__logo">
+                    </div>
+                    <h1 class="hero__title">Building Second Chances Through Code</h1>
+                    <p class="hero__subtitle">
+                        Second Story is developing a software engineering program for justice-impacted individuals, 
+                        launching pilot cohort Q1-Q2 2027. We believe in transparent communication about where we are 
+                        in our journey.
+                    </p>
+                    
+                    <div class="status-banner">
+                        <span class="status-banner__icon">≡ƒÜÇ</span>
+                        <span class="status-banner__text">
+                            Currently: Planning Phase | Pilot Launch: Q1-Q2 2027 | 
+                            Accepting Early Interest Applications
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__background">
+                <img src="assets/brand/2ndStoryBanner2.png" alt="" class="hero__banner" aria-hidden="true">
+            </div>
+        </section>
+
+        <!-- Program Status Section -->
+        <section id="program-status" class="section section--lg section--white">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Program Status & Development Timeline</h2>
+                <p class="section__subtitle">
+                    We believe in transparent communication about where we are in our journey. 
+                    Here's our honest progress toward launching Second Story.
+                </p>
+                
+                <!-- Current Status Banner -->
+                <div class="status-banner status-banner--enhanced">
+                    <span class="status-banner__icon">≡ƒÜÇ</span>
+                    <div class="status-banner__content">
+                        <span class="status-banner__text">
+                            <strong>Currently:</strong> Planning Phase | <strong>Pilot Launch:</strong> Q1-Q2 2027 | 
+                            <strong>Status:</strong> Accepting Early Interest Applications
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Development Phases -->
+                <div class="grid grid--2 grid--items-start spacing--top-2">
+                    <div class="card card--phase card--current fade-in-left">
+                        <div class="card__header">
+                            <div class="phase-indicator">
+                                <span class="phase-indicator__status">Current Phase</span>
+                                <span class="phase-indicator__progress">75% Complete</span>
+                            </div>
+                            <h3 class="card__title">Planning & Development</h3>
+                            <p class="card__content">
+                                Building program infrastructure, curriculum development, and establishing partnerships with employers and community organizations.
+                            </p>
+                            <div class="progress-bar">
+                                <div class="progress-bar__fill" style="width: 75%"></div>
+                            </div>
+                            <div class="phase-metrics">
+                                <div class="metric">
+                                    <span class="metric__value">75%</span>
+                                    <span class="metric__label">Curriculum Complete</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric__value">3</span>
+                                    <span class="metric__label">Partnerships Active</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric__value">Q1 2027</span>
+                                    <span class="metric__label">Target Launch</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card card--phase card--next fade-in-right">
+                        <div class="card__header">
+                            <div class="phase-indicator">
+                                <span class="phase-indicator__status">Next Phase</span>
+                                <span class="phase-indicator__progress">0% Complete</span>
+                            </div>
+                            <h3 class="card__title">Pilot Program Launch</h3>
+                            <p class="card__content">
+                                First cohort of 10-15 participants will begin the dual-track program, combining technical training with narrative workshops.
+                            </p>
+                            <div class="progress-bar">
+                                <div class="progress-bar__fill" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-metrics">
+                                <div class="metric">
+                                    <span class="metric__value">0</span>
+                                    <span class="metric__label">Participants Enrolled</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric__value">12</span>
+                                    <span class="metric__label">Month Duration</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric__value">$65K</span>
+                                    <span class="metric__label">Target Salary</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Development Timeline -->
+                <div class="timeline-section spacing--top-3">
+                    <h3 class="section__subtitle">Development Milestones</h3>
+                    <div class="timeline-grid">
+                        <div class="timeline-item timeline-item--completed">
+                            <div class="timeline-marker">
+                                <span class="timeline-icon">Γ£ô</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Program Design Complete</h4>
+                                <p class="timeline-description">Dual-track model finalized with technical and narrative components</p>
+                                <span class="timeline-date">Q4 2024</span>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item timeline-item--current">
+                            <div class="timeline-marker">
+                                <span class="timeline-icon">≡ƒöä</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Partnership Development</h4>
+                                <p class="timeline-description">Building employer and community partnerships</p>
+                                <span class="timeline-date">Q1 2027</span>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item timeline-item--upcoming">
+                            <div class="timeline-marker">
+                                <span class="timeline-icon">≡ƒæÑ</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Pilot Cohort Recruitment</h4>
+                                <p class="timeline-description">First 10-15 participants selected</p>
+                                <span class="timeline-date">Q1-Q2 2027</span>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item timeline-item--upcoming">
+                            <div class="timeline-marker">
+                                <span class="timeline-icon">≡ƒÄ»</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Program Launch</h4>
+                                <p class="timeline-description">Full program begins with first cohort</p>
+                                <span class="timeline-date">Q1-Q2 2027</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transparency Metrics -->
+                <div class="transparency-section spacing--top-3">
+                    <h3 class="section__subtitle">Transparency Updates</h3>
+                    <div class="grid grid--4">
+                        <div class="transparency-card">
+                            <div class="transparency-icon">≡ƒôè</div>
+                            <h4 class="transparency-title">Current Status</h4>
+                            <p class="transparency-value">Planning Phase</p>
+                        </div>
+                        <div class="transparency-card">
+                            <div class="transparency-icon">≡ƒÆ░</div>
+                            <h4 class="transparency-title">Funding Status</h4>
+                            <p class="transparency-value">Seeking Initial Funding</p>
+                        </div>
+                        <div class="transparency-card">
+                            <div class="transparency-icon">≡ƒæÑ</div>
+                            <h4 class="transparency-title">Team Status</h4>
+                            <p class="transparency-value">Founder + Board of Directors</p>
+                        </div>
+                        <div class="transparency-card">
+                            <div class="transparency-icon">ΓÜû∩╕Å</div>
+                            <h4 class="transparency-title">Legal Status</h4>
+                            <p class="transparency-value">501(c)(3) Approved Γ£ô</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Disclaimer -->
+                <div class="metrics-disclaimer spacing--top-2">
+                    <p><strong>Important Disclaimer:</strong> These are our current development plans and projected timeline based on similar successful programs. Second Story has not yet launched - timeline and details may evolve as we secure partnerships and funding. All progress will be tracked and reported transparently.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section id="our-story" class="section section--lg">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStory01.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Why Second Story Exists</h2>
+                <p class="section__subtitle">
+                    Founded by Eric Petross, a justice-impacted individual who transformed 20 years of restaurant leadership into a tech career through Columbia's Justice Through Code program.
+                </p>
+                
+                <div class="grid grid--2 grid--items-start spacing--top-2">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">The Founder's Journey</h3>
+                            <blockquote class="card__content card__content--quote">
+                                "After two decades running kitchens, I discovered that the skills that made me successfulΓÇöorganization, pressure management, team leadershipΓÇötranslate powerfully to software development. Second Story exists because I've lived this journey and know it's possible."
+                            </blockquote>
+                            <p class="card__content">
+                                Eric's transition from restaurant leadership to software engineering demonstrates the transferable skills that justice-impacted individuals bring to the tech industry. His experience forms the foundation of our curriculum and approach.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">Current Status</h3>
+                            <ul class="feature-list">
+                                <li class="feature-list__item">
+                                    <span class="feature-list__icon" aria-hidden="true">≡ƒôÜ</span>
+                                    <p class="feature-list__text">Founder actively enrolled at Columbia (2024-2026)</p>
+                                </li>
+                                <li class="feature-list__item">
+                                    <span class="feature-list__icon" aria-hidden="true">≡ƒñ¥</span>
+                                    <p class="feature-list__text">Building partnerships with JTC and similar programs</p>
+                                </li>
+                                <li class="feature-list__item">
+                                    <span class="feature-list__icon" aria-hidden="true">≡ƒôû</span>
+                                    <p class="feature-list__text">Developing curriculum based on real transition experience</p>
+                                </li>
+                                <li class="feature-list__item">
+                                    <span class="feature-list__icon" aria-hidden="true">≡ƒÆ░</span>
+                                    <p class="feature-list__text">Seeking initial funding and employer partners</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem" class="section section--lg">
+            <div class="container">
+                <h2 class="section__title">The Crisis of the Revolving Door</h2>
+                <p class="section__subtitle">
+                    The cycle of incarceration is driven by systemic barriers that prevent successful reentry. Our returned citizens face staggering unemployment rates and a "Digital Cliff"ΓÇöa profound lack of tech skills needed for today's economy.
+                </p>
+                
+                <div class="grid grid--3 spacing--bottom-3">
+                    <div class="stat-card elastic-hover stagger-item">
+                        <span id="unemployment-stat" class="stat-card__number" aria-label="27 percent">27%</span>
+                        <p class="stat-card__label">Unemployment Rate for Returned Citizens (vs. ~5% for general population)</p>
+                    </div>
+                    <div class="stat-card elastic-hover stagger-item">
+                        <span id="rearrest-stat" class="stat-card__number" aria-label="83 percent">83%</span>
+                        <p class="stat-card__label">Rearrest Rate Within 9 Years of Release</p>
+                    </div>
+                    <div class="stat-card elastic-hover stagger-item">
+                        <span id="cost-stat" class="stat-card__number" aria-label="48 billion dollars">$48B</span>
+                        <p class="stat-card__label">Annual Cost of U.S. State and Federal Prisons</p>
+                    </div>
+                </div>
+
+                <div class="grid grid--2 grid--items-start">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">Employment Halts Recidivism</h3>
+                            <p class="text-sm text--center-small spacing--bottom-1">
+                                This chart shows the dramatic impact of stable employment. Securing a job for just one year drops the three-year recidivism rate by over two-thirds.
+                            </p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="employmentRecidivismChart" aria-label="Bar chart showing recidivism rates: 52% for unemployed vs 16% for employed"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">The "Digital Cliff"</h3>
+                            <p class="card__content spacing--bottom-1">
+                                Individuals reentering society today face a world transformed by technology. Without access to the internet or modern devices while incarcerated, they lack fundamental digital literacy.
+                            </p>
+                        </div>
+                        <ul class="feature-list">
+                            <li class="feature-list__item">
+                                <span class="feature-list__icon" aria-hidden="true">Γ£ô</span>
+                                <p class="feature-list__text">Digital illiteracy creates direct barriers to employment, services, and community reintegration.</p>
+                            </li>
+                            <li class="feature-list__item">
+                                <span class="feature-list__icon" aria-hidden="true">Γ£ô</span>
+                                <p class="feature-list__text">It isolates returning citizens, multiplying challenges and accelerating paths back to incarceration.</p>
+                            </li>
+                            <li class="feature-list__item">
+                                <span class="feature-list__icon" aria-hidden="true">Γ£ô</span>
+                                <p class="feature-list__text">Second Story bridges this gap, creating pathways to the tech economy.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="solution" class="section section--lg section--white">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStory01.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">The Dual-Track Model: Code + Story</h2>
+                <p class="section__subtitle">
+                    A high-paying job is essential, but it's not enough. We're developing an innovative dual-track model that combines two powerful, mutually reinforcing tracks. Technical skills will get program participants the interview; narrative skills will empower them to succeed.
+                </p>
+                
+                <div class="grid grid--2 grid--max-4xl">
+                    <div class="card card--center">
+                        <div class="icon--large" aria-hidden="true">≡ƒÆ╗</div>
+                        <h3 class="card__title">The Code</h3>
+                        <p class="card__content">
+                            Rigorous, market-aligned software engineering training. Apprentices will learn full-stack web development, build real-world projects, and master technical skills for high-growth careers.
+                        </p>
+                    </div>
+                    <div class="card card--center">
+                        <div class="icon--large" aria-hidden="true">≡ƒÄñ</div>
+                        <h3 class="card__title">The Story</h3>
+                        <p class="card__content">
+                            Transformative narrative workshops inspired by The Moth. Apprentices will craft and perform personal stories, building communication skills and confidence to reframe their past as resilience.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey Section -->
+        <section id="journey" class="section section--lg">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">The Apprentice Journey</h2>
+                <p class="section__subtitle">
+                    This is our planned program structure. We're currently in the planning phase 
+                    and will adapt based on what we learn from our pilot cohort. Our program will be a comprehensive, 
+                    multi-phase journey from foundational stabilization to career launch and lifelong community support. 
+                    Click each phase to learn more.
+                </p>
+                
+                <div class="tabs">
+                    <div class="tabs__nav" role="tablist">
+                        <button 
+                            class="tabs__button" 
+                            data-tab="phase1" 
+                            role="tab" 
+                            aria-selected="false" 
+                            aria-controls="phase1"
+                        >
+                            Phase 1: Bridge
+                        </button>
+                        <button 
+                            class="tabs__button" 
+                            data-tab="phase2" 
+                            role="tab" 
+                            aria-selected="false" 
+                            aria-controls="phase2"
+                        >
+                            Phase 2: Core Program
+                        </button>
+                        <button 
+                            class="tabs__button" 
+                            data-tab="phase3" 
+                            role="tab" 
+                            aria-selected="false" 
+                            aria-controls="phase3"
+                        >
+                            Phase 3: Career Launch
+                        </button>
+                    </div>
+                    
+                    <div class="tabs__content">
+                        <div id="phase1" class="tabs__panel" role="tabpanel" aria-hidden="true">
+                            <h3>Recruitment & Bridge Program (2-4 Weeks)</h3>
+                            <p>
+                                We will start by identifying high-potential candidates and preparing them for success. This paid, pre-apprenticeship program will close the "Digital Cliff" by teaching foundational digital literacy and professional norms, ensuring everyone starts the core program on a level playing field.
+                            </p>
+                        </div>
+                        <div id="phase2" class="tabs__panel" role="tabpanel" aria-hidden="true">
+                            <h3>Core Apprenticeship (12 Months)</h3>
+                            <p>
+                                The heart of our planned "earn and learn" model. Program participants will receive a living wage while engaging in our dual-track curriculum. 80% of their time will be dedicated to immersive technical training, building real applications. 20% will be spent in narrative workshops, honing their personal story and public speaking skills.
+                            </p>
+                        </div>
+                        <div id="phase3" class="tabs__panel" role="tabpanel" aria-hidden="true">
+                            <h3>Job Placement & Alumni Network (Lifelong)</h3>
+                            <p>
+                                Graduation will be just the beginning. We will provide dedicated placement support, connecting graduates with our network of employer partners. Alumni will join a lifelong community for peer support, professional development, and opportunities to mentor the next generation, creating a virtuous cycle of success.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Impact Section -->
+        <section id="impact" class="section section--lg section--white">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Our Goals (Based on Industry Benchmarks)</h2>
+                <p class="section__subtitle">
+                    We measure success through transformed lives and communities. These are projected goals based on similar successful programs like LaunchCode and employment-focused reentry initiatives. Actual results will be tracked and shared transparently once we launch.
+                </p>
+                
+                <div class="grid grid--3">
+                    <div class="stat-card elastic-hover stagger-item">
+                        <h3 class="card__title spacing--bottom-1">Placement Target: 85%+</h3>
+                        <div class="chart-container chart--small">
+                            <canvas id="placementRateChart" aria-label="Donut chart showing 85% job placement rate goal"></canvas>
+                        </div>
+                        <p class="text-sm text--muted spacing--top-1">
+                            <em>Based on LaunchCode (82%) and similar programs</em><br>
+                            Target: 85%+ placement in full-time tech roles within 3 months of graduation.
+                        </p>
+                    </div>
+                    
+                    <div class="stat-card elastic-hover stagger-item">
+                        <h3 class="card__title spacing--bottom-1">Salary Range: $55-75K</h3>
+                        <div class="chart-container chart--small">
+                            <canvas id="salaryChart" aria-label="Bar chart showing target salary range for graduates"></canvas>
+                        </div>
+                        <p class="text-sm text--muted spacing--top-1">
+                            <em>NYC junior developer average: $65K (Glassdoor 2024)</em><br>
+                            Goal: Match or exceed entry-level market rates, creating pathways to economic mobility.
+                        </p>
+                    </div>
+                    
+                    <div class="stat-card elastic-hover stagger-item">
+                        <h3 class="card__title spacing--bottom-1">Recidivism Reduction: &lt;15%</h3>
+                        <div class="chart-container chart--small">
+                            <canvas id="recidivismReductionChart" aria-label="Bar chart showing recidivism reduction target"></canvas>
+                        </div>
+                        <p class="text-sm text--muted spacing--top-1">
+                            <em>National average: 68% | With employment: 15-20%</em><br>
+                            Our target based on employment-focused reentry programs.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="metrics-disclaimer">
+                    <p><strong>Important Disclaimer:</strong> These are projected goals based on industry benchmarks and similar successful programs like LaunchCode and employment-focused reentry initiatives.
+                    Second Story has not yet launched - these represent our targets, not actual results.
+                    Once operational, all metrics will be tracked and reported transparently with quarterly impact reports.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Development Timeline Section -->
+        <section id="timeline" class="section section--lg">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Program Development Timeline</h2>
+                <p class="section__subtitle">
+                    We're taking a methodical approach to building Second Story, ensuring each phase is properly 
+                    developed and tested before scaling. Here's our realistic roadmap from concept to full operation.
+                </p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker timeline-marker--current">
+                            <span class="timeline-number">1</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Phase 1: Foundation (Current)</h3>
+                            <div class="timeline-details">
+                                <ul class="timeline-list">
+                                    <li>Curriculum development with Columbia JTC insights</li>
+                                    <li>Building employer partner network</li>
+                                    <li>Securing initial funding</li>
+                                    <li>Recruiting advisory board</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker timeline-marker--future">
+                            <span class="timeline-number">2</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Phase 2: Pilot Program (Q1-Q2 2027)</h3>
+                            <div class="timeline-details">
+                                <ul class="timeline-list">
+                                    <li>5-person pilot cohort</li>
+                                    <li>6-month intensive program</li>
+                                    <li>Partnership with existing bootcamps</li>
+                                    <li>Measured outcomes for scaling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker timeline-marker--future">
+                            <span class="timeline-number">3</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Phase 3: Full Launch (2028)</h3>
+                            <div class="timeline-details">
+                                <ul class="timeline-list">
+                                    <li>15-person cohorts quarterly</li>
+                                    <li>Dedicated facility</li>
+                                    <li>Full-time instructors</li>
+                                    <li>Corporate partnerships active</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Organization Information Section -->
+        <section id="organization" class="section section--lg section--white">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Organization Information</h2>
+                <p class="section__subtitle">
+                    Transparency and accountability are core to our mission. Here's everything you need to know 
+                    about Second Story as an organization, our governance, and our commitment to ethical operations.
+                </p>
+                
+                <div class="org-info-grid">
+                    <div class="org-info-card">
+                        <div class="org-info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                                <path d="M13 12h3a2 2 0 0 1 2 2v1"/>
+                                <path d="M11 12H8a2 2 0 0 0-2 2v1"/>
+                            </svg>
+                        </div>
+                        <h3 class="org-info-title">Legal Status</h3>
+                        <div class="org-info-content">
+                            <ul class="org-info-list">
+                                <li><strong>Founded:</strong> 2024</li>
+                                <li><strong>501(c)(3) status:</strong> Approved - Tax-exempt public charity</li>
+                                <li><strong>EIN:</strong> Available upon request</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="org-info-card">
+                        <div class="org-info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3 class="org-info-title">Board of Directors</h3>
+                        <div class="org-info-content">
+                            <p class="org-info-description">Guiding organizational strategy and governance:</p>
+                            <ul class="org-info-list">
+                                <li><strong>Mia E. Smith</strong> ΓÇö Board Chair</li>
+                                <li><strong>Page Pena</strong> ΓÇö Board Member</li>
+                                <li><strong>Mary-Louise Joseph</strong> ΓÇö Board Member</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="org-info-card">
+                        <div class="org-info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                        </div>
+                        <h3 class="org-info-title">Transparency Commitment</h3>
+                        <div class="org-info-content">
+                            <p class="org-info-description">We believe in radical transparency and accountability:</p>
+                            <ul class="org-info-list">
+                                <li>All metrics will be publicly reported</li>
+                                <li>Financial statements available upon request</li>
+                                <li>Impact reports published quarterly once operational</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="org-info-card org-info-card--contact">
+                        <div class="org-info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <h3 class="org-info-title">Contact for Partnership</h3>
+                        <div class="org-info-content">
+                            <div class="contact-info">
+                                <p class="contact-name"><strong>Eric Petross, Founder</strong></p>
+                                <p class="contact-email">eric@straydog-secondstory.org</p>
+                                <a href="https://www.linkedin.com/in/eric-petross/" target="_blank" rel="noopener noreferrer" class="contact-linkedin">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                        <rect x="2" y="9" width="4" height="12"/>
+                                        <circle cx="4" cy="4" r="2"/>
+                                    </svg>
+                                    LinkedIn Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Section -->
+        <section id="budget" class="section section--lg">
+            <div class="container">
+                <div class="section__brand">
+                    <img src="assets/brand/2ndStoryCircle.png" alt="Second Story Brand" class="section__brand-logo">
+                </div>
+                <h2 class="section__title">Our 2-Year Plan & Budget</h2>
+                <p class="section__subtitle">
+                    We're developing a clear, actionable roadmap for launch and growth. This chart shows our projected allocation of resources based on similar programs, demonstrating how funding will be strategically used to build our program and serve our first cohort. We're currently seeking initial funding to begin implementation.
+                    <br><br>
+                    <strong>Important Disclaimer:</strong> These are projected budget estimates based on industry benchmarks and similar programs. Actual costs may vary as we develop partnerships and refine our approach.
+                </p>
+                
+                <div class="budget-chart">
+                    <div class="budget-controls">
+                        <div class="budget-controls__group">
+                            <button id="year1-btn" class="budget-controls__button active">Year 1</button>
+                            <button id="year2-btn" class="budget-controls__button">Year 2</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container chart--budget">
+                        <canvas id="budgetChart" aria-label="Horizontal bar chart showing budget allocation by category"></canvas>
+                    </div>
+                    
+                    <div id="budget-details" class="budget-details">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="join-us" class="section section--lg section--primary">
+            <div class="container">
+                <h2 class="section__title">Help Us Build This Story</h2>
+                <p class="section__subtitle">
+                    We cannot do this alone. We're building an ecosystem of partners committed to creating second chances. Whether you are a potential employer, a community organization, or a donor, you have a role to play in helping us develop this program.
+                </p>
+                
+                <div class="cta-grid">
+                    <div class="cta-card">
+                        <h3 class="cta-card__title">Partner with Us</h3>
+                        <p class="cta-card__text">
+                            Become an employer partner and gain access to a pipeline of skilled, resilient, and motivated tech talent.
+                        </p>
+                        <a href="#" class="cta-card__button">Express Interest</a>
+                        <p class="cta-card__note">We're building our program and will contact you when we launch.</p>
+                    </div>
+                    
+                    <div class="cta-card">
+                        <h3 class="cta-card__title">Support Us</h3>
+                        <p class="cta-card__text">
+                            Your financial contribution provides the resourcesΓÇöfrom laptops to living wagesΓÇöthat make our work possible.
+                        </p>
+                        <a href="#" class="cta-card__button">Express Interest</a>
+                        <p class="cta-card__note">We're seeking initial funding and will contact you when we're ready to accept donations.</p>
+                    </div>
+                    
+                    <div class="cta-card">
+                        <h3 class="cta-card__title">Get Involved</h3>
+                        <p class="cta-card__text">
+                            Join our network of community partners or mentors to provide the holistic support our program participants will need to thrive.
+                        </p>
+                        <a href="#" class="cta-card__button">Express Interest</a>
+                        <p class="cta-card__note">We're building our program and will contact you when we launch.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__links">
+                    <a href="https://straydog-syndications-llc.com">Main Site</a>
+                    <a href="https://www.straydogsyndicationsllc.tech/">Tech Portal</a>
+                    <a href="https://straydogsyndicationsllc.biz">Business</a>
+                    <a href="https://straydogsyn.github.io/Learner-Files-v3.5/">Portfolio</a>
+                </div>
+                <p>&copy; <span id="year">2024</span> Second Story Initiative</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">A registered 501(c)(3) nonprofit organization</p>
+                <p style="margin-top: 0.25rem; font-size: 0.85rem; opacity: 0.8;">EIN available upon request | Code, Narrative, and Opportunity</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Install App Button for PWA -->
+    <button id="install-app" class="sr-only">Install App</button>
+    
+    <!-- Skip link for accessibility -->
+    <a href="#main" class="sr-only">Skip to main content</a>
+</body>
+</html>
