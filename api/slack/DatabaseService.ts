@@ -426,14 +426,18 @@ export class DatabaseService {
       }
 
       const { data, error } = await query
-        .lt('current_mentees', 'max_mentees')
         .order('experience_years', { ascending: false });
 
       if (error) {
         throw error;
       }
 
-      return data as MentorProfile[];
+      // Filter in application code: current_mentees is an array, so compare its length to max_mentees
+      const available = (data as MentorProfile[]).filter(
+        m => (m.current_mentees?.length || 0) < m.max_mentees
+      );
+
+      return available;
     } catch (error) {
       console.error('Error finding available mentors:', error);
       return [];
@@ -443,18 +447,18 @@ export class DatabaseService {
   // Analytics and Metrics
   async getLearnerMetrics(): Promise<any> {
     try {
-      const { data: totalLearners, error: totalError } = await this.supabase
+      const { count: totalLearnersCount, error: totalError } = await this.supabase
         .from('learner_profiles')
-        .select('id', { count: 'exact' });
+        .select('id', { count: 'exact', head: true });
 
-      const { data: activeLearners, error: activeError } = await this.supabase
+      const { count: activeLearnersCount, error: activeError } = await this.supabase
         .from('learner_profiles')
-        .select('id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .gte('last_active', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
-      const { data: challengesThisWeek, error: challengesError } = await this.supabase
+      const { count: challengesThisWeekCount, error: challengesError } = await this.supabase
         .from('progress_entries')
-        .select('id', { count: 'exact' })
+        .select('id', { count: 'exact', head: true })
         .eq('activity_type', 'challenge')
         .eq('status', 'completed')
         .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
@@ -472,9 +476,9 @@ export class DatabaseService {
         : 0;
 
       return {
-        totalLearners: totalLearners?.length || 0,
-        activeLearners: activeLearners?.length || 0,
-        challengesCompletedThisWeek: challengesThisWeek?.length || 0,
+        totalLearners: totalLearnersCount ?? 0,
+        activeLearners: activeLearnersCount ?? 0,
+        challengesCompletedThisWeek: challengesThisWeekCount ?? 0,
         averageCompletionRate: Math.round(averageCompletionRate),
       };
     } catch (error) {

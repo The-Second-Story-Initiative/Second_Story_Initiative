@@ -8,6 +8,11 @@ import { authenticateToken, type AuthenticatedRequest } from '../middleware/auth
 
 const router = Router();
 
+// Sanitize search input for use in Supabase .or() filter strings
+function sanitizeSearchParam(input: string): string {
+  return input.replace(/[%_,()."'\\]/g, '');
+}
+
 /**
  * Get All Public Projects
  * GET /api/projects
@@ -32,7 +37,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 
     // Apply filters
     if (search) {
-      query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+      const sanitized = sanitizeSearchParam(search as string);
+      query = query.or(`title.ilike.%${sanitized}%,description.ilike.%${sanitized}%`);
     }
     
     if (status) {
@@ -90,7 +96,8 @@ router.get('/my', authenticateToken, async (req: AuthenticatedRequest, res: Resp
 
     // Apply filters
     if (search) {
-      query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+      const sanitized = sanitizeSearchParam(search as string);
+      query = query.or(`title.ilike.%${sanitized}%,description.ilike.%${sanitized}%`);
     }
     
     if (status) {
@@ -166,11 +173,14 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Increment view count
-    await supabase
-      .from('projects')
-      .update({ views_count: (project.views_count || 0) + 1 })
-      .eq('id', id);
+    // Increment view count atomically
+    const { error: viewError } = await supabase.rpc('increment_views_count', { project_id: id });
+    if (viewError) {
+      console.error('View count increment error:', viewError);
+    }
+
+    // Return project with incremented view count
+    project.views_count = (project.views_count || 0) + 1;
 
     res.status(200).json({
       success: true,
@@ -428,8 +438,6 @@ router.post('/:id/like', authenticateToken, async (req: AuthenticatedRequest, re
       .eq('user_id', userId)
       .single();
 
-    let newLikesCount = project.likes_count || 0;
-
     if (existingLike) {
       // Unlike the project
       await supabase
@@ -437,8 +445,6 @@ router.post('/:id/like', authenticateToken, async (req: AuthenticatedRequest, re
         .delete()
         .eq('project_id', id)
         .eq('user_id', userId);
-      
-      newLikesCount = Math.max(0, newLikesCount - 1);
     } else {
       // Like the project
       await supabase
@@ -447,11 +453,17 @@ router.post('/:id/like', authenticateToken, async (req: AuthenticatedRequest, re
           project_id: id,
           user_id: userId
         });
-      
-      newLikesCount = newLikesCount + 1;
     }
 
-    // Update project likes count
+    // Get accurate like count from the source of truth
+    const { count: likesCount, error: countError } = await supabase
+      .from('project_likes')
+      .select('id', { count: 'exact', head: true })
+      .eq('project_id', id);
+
+    const newLikesCount = likesCount ?? 0;
+
+    // Sync the denormalized likes_count
     const { error: updateError } = await supabase
       .from('projects')
       .update({ likes_count: newLikesCount })
@@ -459,11 +471,6 @@ router.post('/:id/like', authenticateToken, async (req: AuthenticatedRequest, re
 
     if (updateError) {
       console.error('Update likes count error:', updateError);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to update likes count'
-      });
-      return;
     }
 
     res.status(200).json({

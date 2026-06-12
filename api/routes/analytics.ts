@@ -337,7 +337,12 @@ router.get('/platform', authenticateToken, requireRole('admin'), async (req: Aut
     // Learning Statistics
     const { data: enrollments } = await supabase
       .from('user_track_enrollments')
-      .select('*');
+      .select(`
+        *,
+        track:track_id (
+          total_modules
+        )
+      `);
 
     const { data: moduleProgress } = await supabase
       .from('user_module_progress')
@@ -350,7 +355,7 @@ router.get('/platform', authenticateToken, requireRole('admin'), async (req: Aut
         new Date(e.enrolled_at) > startDate
       ).length || 0,
       modules_completed: moduleProgress?.filter(p => p.status === 'completed').length || 0,
-      avg_completion_rate: calculateAvgCompletionRate(enrollments, moduleProgress)
+      avg_completion_rate: calculateAvgCompletionRate(enrollments || [], moduleProgress || [])
     };
 
     // Project Statistics
@@ -573,18 +578,17 @@ router.get('/engagement', authenticateToken, async (req: AuthenticatedRequest, r
 // Helper Functions
 function calculateStreak(progressArray: any[]): number {
   let currentStreak = 0;
-  let maxStreak = 0;
   
+  // Traverse from the end (today) backwards; stop at the first day with no completions
   for (let i = progressArray.length - 1; i >= 0; i--) {
     if (progressArray[i].modules_completed > 0) {
       currentStreak++;
-      maxStreak = Math.max(maxStreak, currentStreak);
     } else {
-      currentStreak = 0;
+      break;
     }
   }
   
-  return maxStreak;
+  return currentStreak;
 }
 
 function calculateAvgCompletionRate(enrollments: any[], moduleProgress: any[]): number {

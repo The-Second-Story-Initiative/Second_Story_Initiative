@@ -7,6 +7,8 @@ export interface AuthenticatedRequest extends Request {
     id: string;
     email: string;
     role: string;
+    full_name?: string;
+    github_username?: string;
   };
 }
 
@@ -35,7 +37,7 @@ export const authenticateToken = async (
     // Get user profile from database
     const { data: profile, error: profileError } = await supabase
       .from('users')
-      .select('id, email, role')
+      .select('id, email, role, full_name, github_username')
       .eq('id', user.id)
       .single();
 
@@ -52,14 +54,15 @@ export const authenticateToken = async (
   }
 };
 
-export const requireRole = (roles: string[]) => {
+export const requireRole = (roles: string | string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({ success: false, error: 'Authentication required' });
       return;
     }
 
-    if (!roles.includes(req.user.role)) {
+    const roleArray = Array.isArray(roles) ? roles : [roles];
+    if (!roleArray.includes(req.user.role)) {
       res.status(403).json({ success: false, error: 'Insufficient permissions' });
       return;
     }

@@ -136,7 +136,6 @@ Always maintain a positive, professional tone while providing accurate technical
 
     // Prepare messages for Claude
     const messages = [
-      { role: 'user' as const, content: systemPrompt },
       ...conversation_history.map((msg: any) => ({
         role: msg.role as 'user' | 'assistant',
         content: msg.content
@@ -148,6 +147,7 @@ Always maintain a positive, professional tone while providing accurate technical
     const response = await anthropic.messages.create({
       model: 'claude-3-sonnet-20240229',
       max_tokens: 1000,
+      system: systemPrompt,
       messages: messages.slice(-10) // Keep last 10 messages for context
     });
 

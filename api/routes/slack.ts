@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { DatabaseService } from '../slack/DatabaseService.js';
 import { ContentAggregator } from '../slack/ContentAggregator.js';
+import { authenticateToken, requireRole, type AuthenticatedRequest } from '../middleware/auth.js';
 import Anthropic from '@anthropic-ai/sdk';
 import { App } from '@slack/bolt';
 
@@ -62,7 +63,15 @@ const verifySlackRequest = (req: Request, res: Response, next: NextFunction) => 
       .update(sigBasestring)
       .digest('hex');
 
-    if (crypto.timingSafeEqual(Buffer.from(mySignature), Buffer.from(slackSignature))) {
+    const mySignatureBuffer = Buffer.from(mySignature);
+    const slackSignatureBuffer = Buffer.from(slackSignature);
+
+    if (mySignatureBuffer.length !== slackSignatureBuffer.length) {
+      res.status(400).json({ error: 'Invalid signature' });
+      return;
+    }
+
+    if (crypto.timingSafeEqual(mySignatureBuffer, slackSignatureBuffer)) {
       next();
     } else {
       res.status(400).json({ error: 'Invalid signature' });
@@ -329,9 +338,8 @@ router.get('/mentors/available', async (req: Request, res: Response) => {
 });
 
 // Get metrics (admin only)
-router.get('/metrics', async (req: Request, res: Response) => {
+router.get('/metrics', authenticateToken, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
   try {
-    // TODO: Add admin authentication
     const [learnerMetrics, engagementMetrics] = await Promise.all([
       database.getLearnerMetrics(),
       database.getEngagementMetrics()
@@ -351,9 +359,8 @@ router.get('/metrics', async (req: Request, res: Response) => {
 });
 
 // Get at-risk learners (admin only)
-router.get('/admin/at-risk-learners', async (req: Request, res: Response) => {
+router.get('/admin/at-risk-learners', authenticateToken, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
   try {
-    // TODO: Add admin authentication
     const atRiskLearners = await database.identifyAtRiskLearners();
     res.json({ success: true, data: atRiskLearners });
   } catch (error) {
@@ -363,9 +370,8 @@ router.get('/admin/at-risk-learners', async (req: Request, res: Response) => {
 });
 
 // Trigger content aggregation
-router.post('/admin/aggregate-content', async (req: Request, res: Response) => {
+router.post('/admin/aggregate-content', authenticateToken, requireRole('admin'), async (req: AuthenticatedRequest, res: Response) => {
   try {
-    // TODO: Add admin authentication
     const { contentType, channelId } = req.body;
 
     if (!contentType) {

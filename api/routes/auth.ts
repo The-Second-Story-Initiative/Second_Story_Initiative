@@ -14,9 +14,10 @@ const router = Router();
  */
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, name, role = 'learner' } = req.body;
+    const { email, password, name, full_name, role = 'learner' } = req.body;
+    const userName = name || full_name;
 
-    if (!email || !password || !name) {
+    if (!email || !password || !userName) {
       res.status(400).json({
         success: false,
         error: 'Email, password, and name are required'
@@ -45,7 +46,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       .insert({
         id: authData.user.id,
         email,
-        name,
+        name: userName,
         role,
         profile_data: {}
       })
@@ -155,7 +156,7 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (token) {
-      await supabase.auth.signOut();
+      await supabaseAdmin.auth.admin.signOut(token);
     }
 
     res.status(200).json({
